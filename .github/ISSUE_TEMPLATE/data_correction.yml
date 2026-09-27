@@ -1,0 +1,23 @@
+name: Catalogue correction
+description: A film moved platforms, has the wrong rating, or a link is broken.
+labels: [data]
+body:
+  - type: input
+    id: movie
+    attributes:
+      label: Movie
+      placeholder: Inception (2010)
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What's wrong
+      placeholder: It left HBO Max and is now on Netflix.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: A link that confirms it (JustWatch, the platform's page, IMDb).

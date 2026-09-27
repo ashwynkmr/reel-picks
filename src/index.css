@@ -1,0 +1,33 @@
+/* Phase 0 placeholder styles. The full 80s theme lands in Phase 2. */
+:root {
+  --color-bg: #2b2622;
+  --color-surface: #efe4cf;
+  --color-accent: #d1a546;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-surface);
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.placeholder {
+  max-width: 36rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.placeholder h1 {
+  color: var(--color-accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.placeholder__stats {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
