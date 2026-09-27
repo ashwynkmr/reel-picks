@@ -219,6 +219,12 @@
   animation: bulb-chase 1.4s steps(2) infinite;
 }
 
+/* the bulbs race while the reel spins */
+[data-phase='rolling'] .marquee__bulbs,
+[data-phase='slating'] .marquee__bulbs {
+  animation-duration: 0.35s;
+}
+
 @keyframes bulb-chase {
   to {
     background-position:

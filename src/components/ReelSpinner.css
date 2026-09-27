@@ -1,0 +1,138 @@
+.reel {
+  --frame-h: 220px; /* keep in sync with FRAME_H in ReelSpinner.tsx */
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: inherit;
+  padding: 1rem;
+  background: radial-gradient(ellipse at 50% 50%, #3a332d, #151210 75%);
+}
+
+/* The projector gate: a window one frame tall that the strip races through. */
+.reel__gate {
+  position: relative;
+  width: min(360px, 88%);
+  height: var(--frame-h);
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 3px #0c0a09,
+    0 0 40px rgb(var(--beam) / 0.35);
+}
+
+/* light falloff and projector flicker over the gate */
+.reel__gate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, rgb(var(--beam) / 0.18), transparent 60%, rgb(0 0 0 / 0.55));
+  animation: reel-flicker 140ms steps(2) infinite;
+}
+
+.reel__strip {
+  /* sprocket holes run down both edges of the film */
+  padding: 0 30px;
+  background:
+    radial-gradient(ellipse at center, #cfc2a7 0 42%, transparent 48%) 8px 0 / 14px 20px repeat-y,
+    radial-gradient(ellipse at center, #cfc2a7 0 42%, transparent 48%) calc(100% - 8px) 0 / 14px 20px repeat-y,
+    #1a1614;
+  will-change: transform, filter;
+  animation:
+    reel-roll var(--roll-ms) forwards,
+    reel-blur var(--roll-ms) linear forwards;
+}
+
+.reel__frame {
+  position: relative;
+  display: grid;
+  align-content: end;
+  justify-items: center;
+  height: calc(var(--frame-h) - 16px);
+  margin-bottom: 16px;
+  padding: 0 0.75rem 1.2rem;
+  color: var(--cream);
+  text-align: center;
+  font-family: var(--font-type);
+}
+
+.reel__frame[data-genre='comedy'] {
+  color: var(--brown);
+}
+
+.reel__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 6px rgb(0 0 0 / 0.45);
+}
+
+.reel__frame[data-genre='comedy'] .reel__title {
+  text-shadow: none;
+}
+
+.reel__year {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+}
+
+.reel__skip {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1rem;
+  padding: 0.3rem 0.7rem;
+  font-family: var(--font-type);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--cream-dim);
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid rgb(207 194 167 / 0.5);
+  border-radius: 3px;
+}
+
+.reel__skip:hover {
+  color: var(--cream);
+  border-color: var(--cream);
+}
+
+/*
+ * Fast start, long deceleration, then a small overshoot and settle, the way
+ * a real reel coasts past the frame and gets pulled back into the gate.
+ */
+@keyframes reel-roll {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.18, 0.5, 0.22, 1);
+  }
+  90% {
+    transform: translateY(calc(var(--travel) * -1 - 14px));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.3, 1);
+  }
+  100% {
+    transform: translateY(calc(var(--travel) * -1));
+  }
+}
+
+@keyframes reel-blur {
+  0% {
+    filter: blur(0);
+  }
+  10% {
+    filter: blur(3px) brightness(1.15);
+  }
+  65% {
+    filter: blur(2px) brightness(1.1);
+  }
+  88%,
+  100% {
+    filter: blur(0) brightness(1);
+  }
+}
+
+@keyframes reel-flicker {
+  50% {
+    opacity: 0.8;
+  }
+}

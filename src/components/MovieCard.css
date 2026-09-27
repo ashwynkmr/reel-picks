@@ -240,3 +240,38 @@
     margin: 0 auto;
   }
 }
+
+/* ---------- Landing: the card settles onto the screen, then the seal stamps down ---------- */
+
+.movie-card {
+  animation: card-land 520ms var(--ease-spring) both;
+}
+
+.movie-card .lobby-card {
+  animation: poster-drop 640ms 60ms var(--ease-spring) both;
+}
+
+.movie-card__seal {
+  animation: seal-stamp 420ms 340ms var(--ease-spring) both;
+}
+
+@keyframes card-land {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
+@keyframes poster-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-28px) rotate(-14deg);
+  }
+}
+
+@keyframes seal-stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.8) rotate(-20deg);
+  }
+}

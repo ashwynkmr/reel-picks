@@ -73,6 +73,19 @@
   opacity: 0.15;
 }
 
+/* while the reel spins the lamp is at full power and flickers */
+.theater__beam.is-rolling {
+  animation:
+    beam-dust 3s linear infinite,
+    beam-flicker 110ms steps(2) infinite;
+}
+
+@keyframes beam-flicker {
+  50% {
+    opacity: 0.75;
+  }
+}
+
 @keyframes beam-dust {
   to {
     background-position:

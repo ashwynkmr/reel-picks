@@ -46,6 +46,25 @@
   transition-duration: 90ms;
 }
 
+/* Spinning: lever held all the way down, reels racing, lamp bright. */
+.projector.is-rolling .projector__lever {
+  transform: rotate(60deg);
+  transition-duration: 120ms;
+}
+
+.projector.is-rolling .projector__reel {
+  animation-duration: 0.5s;
+}
+
+.projector.is-rolling .projector__reel--fast {
+  animation-duration: 0.38s;
+}
+
+.projector.is-rolling .projector__lens {
+  fill: #fffdf5;
+  filter: drop-shadow(0 0 6px #fff3cf);
+}
+
 /* No films match: the lever is jammed and the lamp is out. */
 .projector:disabled {
   cursor: not-allowed;
