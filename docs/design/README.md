@@ -38,8 +38,23 @@ Each part of the product maps to a place in the theatre, so the metaphor explain
 - **Real controls under the costume.** Tickets are checkboxes, cans are radio buttons, the projector
   is a button. The theme never replaces platform semantics.
 - **Ambient motion is gentle and optional.** Bulbs chase, searchlights sway, reels turn, dust drifts
-  in the beam. All of it stops under `prefers-reduced-motion`. The big moment (the spin) is Phase 3.
+  in the beam. All of it stops under `prefers-reduced-motion`.
+- **One big moment.** The spin is the only long animation, it's around 3 seconds, and it's always skippable.
 - **No copyrighted imagery.** Posters are generated "lobby cards" styled by genre.
+
+## The reveal (Phase 3)
+
+![The spin: the reel races through the projector gate, slows onto a film, the clapperboard snaps and the card lands](screenshots/spin.gif)
+
+| Beat  | Duration | What happens                                                                                     |
+| ----- | -------- | ------------------------------------------------------------------------------------------------ |
+| Pull  | instant  | Lever snaps down, reels race, lamp brightens, beam flickers, marquee bulbs speed up              |
+| Roll  | 2.4 s    | 16 frames from the current pool blur through the gate, decelerate, overshoot slightly and settle |
+| Slate | 0.65 s   | Clapperboard marked with scene (mood) and take (pick number) claps shut with a white sync flash  |
+| Land  | 0.5 s    | Card settles onto the screen, poster drops in, IMDb seal stamps down                             |
+
+Skippable at any point (Skip, the lever, Space); cancelled by Esc or any filter change. Reduced-motion
+users go straight to the card. Why no animation library: [ADR 0010](../decisions/0010-motion-without-a-library.md).
 
 ## Type
 

@@ -10,6 +10,8 @@ An 80s movie-palace themed picker that ends "what do we watch tonight?" in under
 
 ![The Reel Picks lobby: a bulb-lit marquee between two poster cases, a box office of admission tickets, a film vault of labelled cans, and a silver screen showing a film-leader countdown](docs/design/screenshots/lobby.jpg)
 
+![The spin: pull the lever, the reel races and slows onto a film, the clapperboard snaps, the card lands](docs/design/screenshots/spin.gif)
+
 | The pick lands on the screen                                                                                                           | Nothing matches? Intermission, with a fix                                                                                                               |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Result card for Joker with a generated poster, clapperboard slate, IMDb seal and trailer ticket](docs/design/screenshots/reveal.jpg) | ![Intermission card saying Netflix has no classics, with buttons to add HBO Max, add Disney+ or try any genre](docs/design/screenshots/empty-state.jpg) |
@@ -40,17 +42,18 @@ fast, so I can stop choosing and start watching._
 
 ## Key decisions and tradeoffs
 
-| Decision                                                                                  | Tradeoff                                                                                              |
-| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [Hand-curated catalogue, no live API](docs/decisions/0001-static-curated-catalogue.md)    | No backend or keys, every film worth watching; availability can drift, so the snapshot date is shown. |
-| [Prefer originals and studio-owned films](docs/decisions/0005-prefer-owned-titles.md)     | Snapshot stays accurate for longer; Netflix and Apple TV end up with almost no classics.              |
-| [Classics as a flag, not a genre](docs/decisions/0004-classics-as-a-flag.md)              | A classic still appears under its real genre; small UI/data mismatch, documented.                     |
-| [Trailer links via YouTube search](docs/decisions/0003-trailer-search-links.md)           | Never a dead link; one extra click when no verified id exists.                                        |
-| [React + Vite on GitHub Pages](docs/decisions/0002-react-vite-github-pages.md)            | Easy reel-to-card animation and typed data; costs a build step and ~75 KB.                            |
-| [Skip the last five picks on re-spin](docs/decisions/0006-avoid-recent-repeats.md)        | Spins feel fresh; gives up strict randomness, which nobody wanted.                                    |
-| [Empty states offer a one-tap fix](docs/decisions/0007-empty-states-offer-a-fix.md)       | No dead ends; suggesting other services could read as an upsell.                                      |
-| [Show the result on the screen, not a modal](docs/decisions/0008-reveal-on-the-screen.md) | Filters and lever stay in reach; custom focus management replaces the dialog's built-in trap.         |
-| [Self-host fonts](docs/decisions/0009-self-host-fonts.md)                                 | No third-party requests; a slightly larger bundle.                                                    |
+| Decision                                                                                           | Tradeoff                                                                                              |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [Hand-curated catalogue, no live API](docs/decisions/0001-static-curated-catalogue.md)             | No backend or keys, every film worth watching; availability can drift, so the snapshot date is shown. |
+| [Prefer originals and studio-owned films](docs/decisions/0005-prefer-owned-titles.md)              | Snapshot stays accurate for longer; Netflix and Apple TV end up with almost no classics.              |
+| [Classics as a flag, not a genre](docs/decisions/0004-classics-as-a-flag.md)                       | A classic still appears under its real genre; small UI/data mismatch, documented.                     |
+| [Trailer links via YouTube search](docs/decisions/0003-trailer-search-links.md)                    | Never a dead link; one extra click when no verified id exists.                                        |
+| [React + Vite on GitHub Pages](docs/decisions/0002-react-vite-github-pages.md)                     | Easy reel-to-card animation and typed data; costs a build step and ~75 KB.                            |
+| [Skip the last five picks on re-spin](docs/decisions/0006-avoid-recent-repeats.md)                 | Spins feel fresh; gives up strict randomness, which nobody wanted.                                    |
+| [Empty states offer a one-tap fix](docs/decisions/0007-empty-states-offer-a-fix.md)                | No dead ends; suggesting other services could read as an upsell.                                      |
+| [Show the result on the screen, not a modal](docs/decisions/0008-reveal-on-the-screen.md)          | Filters and lever stay in reach; custom focus management replaces the dialog's built-in trap.         |
+| [Self-host fonts](docs/decisions/0009-self-host-fonts.md)                                          | No third-party requests; a slightly larger bundle.                                                    |
+| [Reveal with CSS keyframes, no animation library](docs/decisions/0010-motion-without-a-library.md) | 0 KB added and compositor-smooth; no physics springs or drag gestures.                                |
 
 ## What I'd measure
 
@@ -60,13 +63,13 @@ Details and the riskiest assumptions: [problem and opportunity](docs/product/pro
 
 ## Roadmap
 
-| Phase | Scope                                                        | Status  |
-| ----- | ------------------------------------------------------------ | ------- |
-| 0     | Scaffold, CI/CD, curated catalogue + validator, product docs | Done    |
-| 1     | Working picker: filters, no-repeat random pick, result card  | Done    |
-| 2     | 80s look: marquee, ticket and film-can filters, projector    | Done    |
-| 3     | Motion: film-strip spin, lever, clapperboard reveal          | Next    |
-| 4     | Polish: mobile, accessibility, sound, ~150 films, launch     | Planned |
+| Phase | Scope                                                        | Status |
+| ----- | ------------------------------------------------------------ | ------ |
+| 0     | Scaffold, CI/CD, curated catalogue + validator, product docs | Done   |
+| 1     | Working picker: filters, no-repeat random pick, result card  | Done   |
+| 2     | 80s look: marquee, ticket and film-can filters, projector    | Done   |
+| 3     | Motion: film-strip spin, lever, clapperboard reveal          | Done   |
+| 4     | Polish: mobile, accessibility, sound, ~150 films, launch     | Next   |
 
 Changes per phase: [CHANGELOG](CHANGELOG.md). How the look evolved, including a rejected first
 mockup: [design notes](docs/design/README.md).
@@ -99,8 +102,8 @@ deploys `main` to GitHub Pages.
 ```
 src/
   domain/      Pure logic: types, filtering, no-repeat picking, validation, links (unit-tested)
-  hooks/       usePicker (all picker state), usePersistentState (safe localStorage)
-  components/  Box office, film vault, theater + projector lever, result card, intermission
+  hooks/       usePicker (filters, pick, reveal phases), usePersistentState, usePrefersReducedMotion
+  components/  Box office, film vault, theater + projector lever, reel spinner, slate, result card
     decor/     Curtains, film strip, set props (purely decorative, aria-hidden)
   styles/      Design tokens and base styles
   data/        catalogue.json, the curated movie list

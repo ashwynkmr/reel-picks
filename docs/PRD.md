@@ -82,14 +82,16 @@ Muted and warm, not neon synthwave.
 a projector with a pull lever; posters blurring past in a vertical film strip; the result card snaps
 open like a clapperboard into a script-page card; light grain and vignette.
 
-**Motion:** one hero animation per pick (spin ~2.5 s, card ~0.5 s spring); everything else under 250 ms.
+**Motion:** one hero animation per pick (roll 2.4 s, slate 0.65 s, card lands in 0.5 s), always
+skippable, instant for reduced-motion users ([ADR 0010](decisions/0010-motion-without-a-library.md));
+everything else under 250 ms.
 
 ## Development phases
 
-| Phase | Scope                                                                                  | Gate                                         | Status  |
-| ----- | -------------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
-| 0     | Scaffold, tooling, CI/CD, curated catalogue, validator, product docs                   | Every record valid; coverage grid reviewed   | Done    |
-| 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Done    |
-| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Done    |
-| 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Next    |
-| 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Planned |
+| Phase | Scope                                                                                  | Gate                                         | Status |
+| ----- | -------------------------------------------------------------------------------------- | -------------------------------------------- | ------ |
+| 0     | Scaffold, tooling, CI/CD, curated catalogue, validator, product docs                   | Every record valid; coverage grid reviewed   | Done   |
+| 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Done   |
+| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Done   |
+| 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Done   |
+| 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Next   |
