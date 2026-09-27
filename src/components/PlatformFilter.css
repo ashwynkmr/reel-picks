@@ -59,7 +59,7 @@
   margin: 0.9rem 0 0;
   text-align: center;
   font-family: var(--font-type);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--gold-hi);
@@ -117,10 +117,9 @@
   transform: rotate(180deg);
   padding: 0.4rem 0.25rem;
   font-family: var(--font-type);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   letter-spacing: 0.12em;
   border-left: 2px dashed rgb(58 46 38 / 0.35);
-  opacity: 0.75;
 }
 
 .ticket__body {
@@ -134,10 +133,9 @@
 
 .ticket__admit {
   font-family: var(--font-type);
-  font-size: 0.52rem;
-  letter-spacing: 0.25em;
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  opacity: 0.7;
 }
 
 .ticket__name {
@@ -165,12 +163,16 @@
   color: var(--curtain-deep);
   border: 1.5px solid var(--curtain-deep);
   transform: rotate(-8deg);
-  opacity: 0.85;
 }
 
+/*
+ * Switched off: a worn grey ticket. Explicit colours rather than a blanket
+ * opacity, so even the decorative print keeps readable contrast.
+ */
 .ticket.is-off {
-  opacity: 0.45;
-  filter: saturate(0.3);
+  --ticket: #8f8a80;
+  color: #2b2622;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.4);
 }
 
 @media (max-width: 560px) {

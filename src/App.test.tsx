@@ -118,6 +118,15 @@ describe('Reel Picks', () => {
     expect(screen.getByText('Keep at least one service switched on.')).toBeInTheDocument()
   })
 
+  it('has a sound toggle that is on by default and remembered', async () => {
+    const { user } = setup()
+    const toggle = screen.getByRole('button', { name: /Sound/ })
+    expect(toggle).toHaveAttribute('aria-pressed', 'true')
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-pressed', 'false')
+    expect(window.localStorage.getItem('reel-picks:sound:v1')).toBe('false')
+  })
+
   it('remembers platforms between visits', async () => {
     const { user } = setup()
     await user.click(screen.getByRole('checkbox', { name: 'Hulu' }))

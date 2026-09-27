@@ -6,7 +6,7 @@
 **Pick your streaming services and a mood, pull the lever, get one movie.**
 An 80s movie-palace themed picker that ends "what do we watch tonight?" in under 10 seconds.
 
-**Live:** https://ashwynkmr.github.io/reel-picks/
+**Live:** https://ashwynkmr.github.io/reel-picks/ · **Case study:** [how it was scoped, designed and shipped](docs/CASE_STUDY.md)
 
 ![The Reel Picks lobby: a bulb-lit marquee between two poster cases, a box office of admission tickets, a film vault of labelled cans, and a silver screen showing a film-leader countdown](docs/design/screenshots/lobby.jpg)
 
@@ -16,9 +16,15 @@ An 80s movie-palace themed picker that ends "what do we watch tonight?" in under
 | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ![Result card for Joker with a generated poster, clapperboard slate, IMDb seal and trailer ticket](docs/design/screenshots/reveal.jpg) | ![Intermission card saying Netflix has no classics, with buttons to add HBO Max, add Disney+ or try any genre](docs/design/screenshots/empty-state.jpg) |
 
-> Built in public as a product case study: every phase ships with its reasoning.
-> Start with the [problem](docs/product/problem-and-opportunity.md), then the [PRD](docs/PRD.md) and
-> the [decision log](docs/decisions/README.md).
+> Built in public as a product case study: every phase shipped through a reviewed PR with its
+> reasoning. Start with the [case study](docs/CASE_STUDY.md), then the
+> [problem](docs/product/problem-and-opportunity.md), the [PRD](docs/PRD.md) and the
+> [decision log](docs/decisions/README.md).
+
+| Lighthouse (production) | Performance | Accessibility | Best practices | SEO |
+| ----------------------- | ----------- | ------------- | -------------- | --- |
+| Mobile                  | 97          | 100           | 100            | 100 |
+| Desktop                 | 100         | 100           | 100            | 100 |
 
 ---
 
@@ -54,6 +60,7 @@ fast, so I can stop choosing and start watching._
 | [Show the result on the screen, not a modal](docs/decisions/0008-reveal-on-the-screen.md)          | Filters and lever stay in reach; custom focus management replaces the dialog's built-in trap.         |
 | [Self-host fonts](docs/decisions/0009-self-host-fonts.md)                                          | No third-party requests; a slightly larger bundle.                                                    |
 | [Reveal with CSS keyframes, no animation library](docs/decisions/0010-motion-without-a-library.md) | 0 KB added and compositor-smooth; no physics springs or drag gestures.                                |
+| [Synthesized sound, on by default](docs/decisions/0011-synthesized-sound.md)                       | No audio files or licensing, synced to the animation; less realistic than recordings.                 |
 
 ## What I'd measure
 
@@ -69,26 +76,32 @@ Details and the riskiest assumptions: [problem and opportunity](docs/product/pro
 | 1     | Working picker: filters, no-repeat random pick, result card  | Done   |
 | 2     | 80s look: marquee, ticket and film-can filters, projector    | Done   |
 | 3     | Motion: film-strip spin, lever, clapperboard reveal          | Done   |
-| 4     | Polish: mobile, accessibility, sound, ~150 films, launch     | Next   |
+| 4     | Polish: mobile, accessibility, sound, ~150 films, launch     | Done   |
+
+v1.0 is shipped. What I'd build next is in the [case study](docs/CASE_STUDY.md#8-whats-next).
 
 Changes per phase: [CHANGELOG](CHANGELOG.md). How the look evolved, including a rejected first
 mockup: [design notes](docs/design/README.md).
 
 ## Catalogue
 
-76 films today (target ~150), US availability as of 2026-09-27, across Netflix, Prime Video,
-HBO Max, Disney+, Hulu and Apple TV. `npm run validate:data` checks every record and prints a
-coverage grid of films per platform and genre, which is how the classics gap was found:
+154 hand-picked films, US availability as of 2026-09-27, across Netflix, Prime Video, HBO Max,
+Disney+, Hulu and Apple TV. `npm run validate:data` checks every record and prints a coverage grid
+of films per platform and genre:
 
 ```
 platform   classics   action   comedy    drama thriller    scifi
-netflix          0!        4        3        5        6        5
-prime             3        4        4        7        4       1!
-max              10        5        3        5        7        5
-disney           10        8        5        6        3        8
-hulu              4        4        7        6        7        7
-appletv          0!        4        3        7       1!        2
+netflix          1!        8       11       11       11        7
+prime             6       10        7       12        9        5
+max              15       10        8        8       12        8
+disney           18       17       14        9        4       13
+hulu             10        8       13       15       12       10
+appletv          0!        7        5       11        3        3
 ```
+
+The two `!` cells are real market gaps, not missing data: Netflix and Apple TV own almost no
+catalogue classics. The app says so and offers a one-tap fix
+([ADR 0007](docs/decisions/0007-empty-states-offer-a-fix.md)).
 
 Spot a film that moved platforms? [Open a catalogue correction](https://github.com/ashwynkmr/reel-picks/issues/new?template=data_correction.yml).
 
@@ -102,7 +115,8 @@ deploys `main` to GitHub Pages.
 ```
 src/
   domain/      Pure logic: types, filtering, no-repeat picking, validation, links (unit-tested)
-  hooks/       usePicker (filters, pick, reveal phases), usePersistentState, usePrefersReducedMotion
+  hooks/       usePicker (filters, pick, reveal phases), useRevealSounds, usePersistentState, ...
+  audio/       Synthesized projector whir, clapper and seal thud (Web Audio API)
   components/  Box office, film vault, theater + projector lever, reel spinner, slate, result card
     decor/     Curtains, film strip, set props (purely decorative, aria-hidden)
   styles/      Design tokens and base styles
@@ -119,6 +133,7 @@ Requires Node 22.18 or newer.
 npm install
 npm run dev        # http://localhost:5173
 npm run check      # everything CI runs
+npm run build && npm run preview   # the production build at http://localhost:4173/reel-picks/
 ```
 
 ## License

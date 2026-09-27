@@ -71,9 +71,10 @@ lot, the fix is better picks, not hiding the lever.
 
 ## 7. Known gaps (found while building)
 
-- **Classics are concentrated on HBO Max and Disney+.** Netflix and Apple TV own almost no catalogue
-  classics, so "Netflix + Classics" returns nothing. This is a real market fact, not a data bug;
-  the empty state must explain it and suggest adding a platform. (Found by the coverage grid in Phase 0.)
+- **Classics are concentrated on HBO Max, Disney+ and Hulu.** Netflix owns one classic in the
+  catalogue (Klaus) and Apple TV none, so "Apple TV + Classics" returns nothing. This is a real
+  market fact, not a data bug; the empty state explains it and offers to add a platform. (Found by
+  the coverage grid in Phase 0; still true at 154 films.)
 - **Availability rotates monthly** for licensed titles. Mitigated by favouring originals and
   studio-owned films ([ADR 0005](../decisions/0005-prefer-owned-titles.md)).
 - **US only.** Rights differ by country; international support would need a data source per region.
