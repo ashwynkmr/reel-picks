@@ -16,3 +16,4 @@ Written at the time of the decision so the reasoning isn't reconstructed later.
 | [0008](0008-reveal-on-the-screen.md)     | Show the result on the silver screen, not in a modal      | Accepted |
 | [0009](0009-self-host-fonts.md)          | Self-host fonts; no third-party requests                  | Accepted |
 | [0010](0010-motion-without-a-library.md) | Reveal built with CSS keyframes and a phase timer         | Accepted |
+| [0011](0011-synthesized-sound.md)        | Synthesize sound in code; on by default, remembered mute  | Accepted |

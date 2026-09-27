@@ -2,7 +2,7 @@
 
 - **Owner:** [@ashwynkmr](https://github.com/ashwynkmr)
 - **Last updated:** 2026-09-27
-- **Status:** In development (see [roadmap](#development-phases))
+- **Status:** v1.0 shipped (see [roadmap](#development-phases) and the [case study](CASE_STUDY.md))
 
 Background, personas and competitive gaps: [problem and opportunity](product/problem-and-opportunity.md).
 Decisions and tradeoffs: [decision log](decisions/README.md).
@@ -60,7 +60,7 @@ If nothing matches, the lever jams with a "No reels in the can" message and a su
 
 ## Data
 
-About 150 films in `src/data/catalogue.json`, blending classics, 2000s favourites and recent releases.
+154 films in `src/data/catalogue.json`, blending classics, 2000s favourites and recent releases.
 Schema and rules live in `src/domain/catalogue.ts` and are enforced by `npm run validate:data` in CI,
 which also prints a platform x genre coverage grid to catch thin combinations.
 
@@ -94,4 +94,4 @@ everything else under 250 ms.
 | 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Done   |
 | 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Done   |
 | 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Done   |
-| 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Next   |
+| 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Done   |

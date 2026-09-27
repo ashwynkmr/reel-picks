@@ -3,6 +3,26 @@
 All notable changes, grouped by development phase. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [1.0.0] - 2026-09-27 - Phase 4: polish and launch
+
+### Added
+
+- Sound (ADR 0011): synthesized projector whir whose sprocket clicks slow with the reel, a clapper
+  crack on the slate and a soft thud as the IMDb seal lands. On by default, remembered mute toggle
+  hung on the valance. Nothing plays until the lever is pulled.
+- Catalogue grown from 76 to 154 films; Prime sci-fi (1 → 5) and Apple TV thrillers (1 → 3) filled.
+- Link previews: Open Graph and Twitter cards with a 1200×630 marquee image, description,
+  canonical URL and theme colour.
+- Case study (`docs/CASE_STUDY.md`).
+
+### Fixed
+
+- Selected and unselected tickets' small print failed contrast; off tickets are now an explicit
+  worn grey instead of 45% opacity. Lighthouse accessibility 95 → 100.
+- Functional text raised to at least 12 px on phones (can labels and counts, letterboard, prices).
+- Can labels clipped on narrow phones; tape now overhangs the lid slightly.
+- `vite preview` served the production build at the wrong base path, rendering a blank page locally.
+
 ## [0.4.0] - 2026-09-27 - Phase 3: the reveal
 
 ### Added
