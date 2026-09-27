@@ -10,16 +10,22 @@ import { MovieCard } from './components/MovieCard.tsx'
 import { PlatformFilter } from './components/PlatformFilter.tsx'
 import { ReelSpinner } from './components/ReelSpinner.tsx'
 import { SlateSnap } from './components/SlateSnap.tsx'
+import { SoundToggle } from './components/SoundToggle.tsx'
 import { Theater } from './components/Theater.tsx'
 import shippedCatalogue from './data/catalogue.json'
 import type { Catalogue } from './domain/catalogue.ts'
 import { genreLabel } from './domain/picker.ts'
 import { DEFAULT_TIMING, INSTANT, usePicker, type RevealTiming } from './hooks/usePicker.ts'
+import { usePersistentState } from './hooks/usePersistentState.ts'
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion.ts'
+import { useRevealSounds } from './hooks/useRevealSounds.ts'
 import './App.css'
 
 /** Elements where Space already means something (typing, pressing, ticking). */
 const SPACE_CONSUMERS = 'input, textarea, select, button, a, [contenteditable]'
+
+const SOUND_STORAGE_KEY = 'reel-picks:sound:v1'
+const sanitizeBoolean = (stored: unknown) => (typeof stored === 'boolean' ? stored : null)
 
 interface Props {
   /** Injectable for tests; defaults to the shipped catalogue. */
@@ -37,6 +43,10 @@ function App({ catalogue = shippedCatalogue as Catalogue, random, timing = DEFAU
   const canSpin = candidates.length > 0
   const busy = phase === 'rolling' || phase === 'slating'
   const scrollBehavior: ScrollBehavior = reducedMotion ? 'auto' : 'smooth'
+
+  // Sound is on by default (it's part of the fun) and the choice is remembered.
+  const [soundOn, setSoundOn] = usePersistentState(SOUND_STORAGE_KEY, true, sanitizeBoolean)
+  useRevealSounds(phase, picker.take, soundOn, effectiveTiming)
 
   const screenRef = useRef<HTMLDivElement>(null)
   const filtersRef = useRef<HTMLDivElement>(null)
@@ -117,6 +127,7 @@ function App({ catalogue = shippedCatalogue as Catalogue, random, timing = DEFAU
     <>
       <Curtains />
       <div className="stage" data-phase={phase}>
+        <SoundToggle on={soundOn} onToggle={() => setSoundOn((on) => !on)} />
         <Marquee />
         <FilmStrip />
 

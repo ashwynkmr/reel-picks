@@ -1,0 +1,35 @@
+.sound-toggle {
+  /* hung on the valance above the stage, like a brass plaque on the curtain rail */
+  position: absolute;
+  top: -54px;
+  right: calc(var(--curtain-w) + 1.25rem);
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-type);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brown);
+  background: var(--gold);
+  border: 0;
+  border-radius: 999px;
+  box-shadow:
+    0 2px 0 var(--gold-lo),
+    0 4px 10px rgb(0 0 0 / 0.4);
+  transition: transform var(--t-fast) var(--ease-spring);
+}
+
+.sound-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.sound-toggle[aria-pressed='false'] {
+  color: var(--cream-dim);
+  background: #3d3631;
+  box-shadow:
+    inset 0 0 0 1px rgb(207 194 167 / 0.4),
+    0 4px 10px rgb(0 0 0 / 0.4);
+}
