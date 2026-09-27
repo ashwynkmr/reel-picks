@@ -1,0 +1,21 @@
+name: Feature idea
+description: Suggest something new, starting from the user problem.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Who is stuck, and on what? Describe the moment, not the solution.
+      placeholder: When I'm picking a movie with my partner, we ...
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed idea
+  - type: textarea
+    id: signal
+    attributes:
+      label: How would we know it worked?
+      description: A behaviour or metric that would move.
