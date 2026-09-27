@@ -1,0 +1,123 @@
+/* Page-wide base styles: background, film grain, vignette, focus, utilities. */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: var(--font-serif);
+  line-height: 1.5;
+  color: var(--cream);
+  background:
+    /* faint art-deco fan wallpaper */
+    radial-gradient(circle at 50% 100%, transparent 58%, rgb(209 165 70 / 0.05) 59% 61%, transparent 62%) 0 0 / 64px
+      32px,
+    radial-gradient(circle at 50% 100%, transparent 38%, rgb(209 165 70 / 0.04) 39% 41%, transparent 42%) 0 0 / 64px
+      32px,
+    radial-gradient(ellipse at 50% 0%, #3d342d 0%, var(--booth) 40%, var(--booth-deep) 100%);
+  background-attachment: fixed;
+}
+
+/*
+ * Film grain and vignette. Plain opacity rather than a blend mode: a
+ * full-screen fixed layer with mix-blend-mode forces the browser to
+ * re-composite the whole page on every scroll frame.
+ */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+body::before {
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body::after {
+  background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgb(0 0 0 / 0.5) 100%);
+}
+
+a {
+  color: var(--gold-hi);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold-hi);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stage {
+  position: relative;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 calc(var(--curtain-w) + 1.25rem);
+}
+
+/* Section sign: a gold pill in the marquee face, used by box office and vault. */
+.sign {
+  display: block;
+  width: fit-content;
+  margin: 0.4rem auto 0.9rem;
+  padding: 0.35rem 1.4rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brown);
+  background: var(--gold);
+  border-radius: 999px;
+  box-shadow:
+    0 3px 0 var(--gold-lo),
+    0 0 20px rgb(255 214 130 / 0.3);
+}
+
+.sign__sub {
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: var(--cream);
+  opacity: 0.85;
+  margin: -0.3rem 0 0.9rem;
+}
+
+/* Everything ambient stops for people who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+  }
+}

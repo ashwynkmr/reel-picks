@@ -36,51 +36,75 @@ function setup() {
   return { user }
 }
 
+/** The result card on the silver screen. */
+const card = (name?: string | RegExp) => screen.getByRole('article', name ? { name } : undefined)
+const lever = () => screen.getByRole('button', { name: 'Pull the lever' })
+
 describe('Reel Picks', () => {
   it('picks a film that matches the filters and shows its card', async () => {
     const { user } = setup()
     await user.click(screen.getByRole('checkbox', { name: 'HBO Max' }))
     await user.click(screen.getByRole('radio', { name: /Action/ }))
-    await user.click(screen.getByRole('button', { name: 'Pull the lever' }))
+    await user.click(lever())
 
-    const card = screen.getByRole('dialog', { name: 'Extraction' })
-    expect(within(card).getByText(/7\.5/)).toBeInTheDocument()
-    expect(within(card).getByText('2000 · 2h 5m')).toBeInTheDocument()
-    expect(within(card).getByRole('link', { name: /Watch the trailer/ })).toHaveFocus()
-    expect(within(card).getByRole('link', { name: /Watch the trailer/ })).toHaveAttribute(
+    const result = card('Extraction')
+    expect(within(result).getByText(/out of 10 on IMDb/)).toBeInTheDocument()
+    expect(within(result).getByText('2000 · 2h 5m')).toBeInTheDocument()
+    expect(within(result).getByRole('heading', { name: 'Extraction' })).toHaveFocus()
+    expect(within(result).getByRole('link', { name: /Watch the trailer/ })).toHaveAttribute(
       'href',
       expect.stringContaining('youtube.com/results?search_query=Extraction%202000'),
     )
   })
 
-  it('does not repeat the last film when spinning again', async () => {
+  it('does not repeat the last film when spinning again, and counts the takes', async () => {
     const { user } = setup()
     await user.click(screen.getByRole('checkbox', { name: 'HBO Max' }))
-    await user.click(screen.getByRole('button', { name: 'Pull the lever' }))
-    expect(screen.getByRole('dialog', { name: 'Extraction' })).toBeInTheDocument()
+    await user.click(lever())
+    expect(card('Extraction')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Spin again' }))
-    expect(screen.getByRole('dialog', { name: 'Marriage Story' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Spin again/ }))
+    expect(card('Marriage Story')).toBeInTheDocument()
+    expect(within(card()).getByText('Take').parentElement).toHaveTextContent('Take2')
   })
 
-  it('closes the card with "Change filters"', async () => {
+  it('clears the screen with "Change filters" and with Esc', async () => {
     const { user } = setup()
-    await user.click(screen.getByRole('button', { name: 'Pull the lever' }))
+    await user.click(lever())
     await user.click(screen.getByRole('button', { name: 'Change filters' }))
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+
+    await user.click(lever())
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+    expect(lever()).toHaveFocus()
   })
 
-  it('offers a one-tap fix when the filters match nothing', async () => {
+  it('clears the screen when the filters change', async () => {
+    const { user } = setup()
+    await user.click(lever())
+    expect(card()).toBeInTheDocument()
+    await user.click(screen.getByRole('radio', { name: /Drama/ }))
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+  })
+
+  it('jams the lever and offers a one-tap fix when the filters match nothing', async () => {
     const { user } = setup()
     await user.click(screen.getByRole('checkbox', { name: 'HBO Max' }))
     await user.click(screen.getByRole('radio', { name: /Classics/ }))
 
-    expect(screen.queryByRole('button', { name: 'Pull the lever' })).not.toBeInTheDocument()
+    expect(lever()).toBeDisabled()
     expect(screen.getByText('No reels in the can.')).toBeInTheDocument()
     expect(screen.getByText('None of your services have classics in our catalogue right now.')).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Add HBO Max' }))
-    expect(screen.getByRole('button', { name: 'Pull the lever' })).toBeInTheDocument()
+    expect(lever()).toBeEnabled()
+  })
+
+  it('shows how many films each mood would draw from', () => {
+    setup()
+    expect(screen.getByRole('radio', { name: /Classics/ })).toHaveAccessibleName('Classics, 1 reel')
+    expect(screen.getByRole('radio', { name: /Any genre/ })).toHaveAccessibleName('Any genre, 3 reels')
   })
 
   it('never lets the last platform be switched off', async () => {
@@ -102,6 +126,6 @@ describe('Reel Picks', () => {
     const { user } = setup()
     await user.click(document.body)
     await user.keyboard(' ')
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(card()).toBeInTheDocument()
   })
 })

@@ -1,0 +1,49 @@
+/*
+ * Design tokens for the 1984 movie-palace theme.
+ * Every colour, font and shared gradient lives here so components never
+ * hard-code a hex value. Approved design: docs/design/phase-2-mockup.html
+ */
+@import '@fontsource/limelight/400.css';
+@import '@fontsource/special-elite/400.css';
+@import '@fontsource/yellowtail/400.css';
+@import '@fontsource/libre-baskerville/400.css';
+@import '@fontsource/libre-baskerville/700.css';
+
+:root {
+  /* Palette: muted and warm, never neon */
+  --booth: #2b2622;
+  --booth-deep: #1a1614;
+  --cream: #efe4cf;
+  --cream-dim: #cfc2a7;
+  --curtain: #a3453b;
+  --curtain-deep: #6e2a24;
+  --curtain-dark: #4a1c18;
+  --mustard: #d1a546;
+  --gold-hi: #f0cf7a;
+  --gold-lo: #8a6a26;
+  --teal: #4f7a74;
+  --teal-deep: #2f4a46;
+  --brown: #3a2e26;
+  --tin: #8b8f88;
+  --bulb: #fff3cf;
+  --bulb-glow: #ffd77a;
+  --beam: 255 231 168; /* rgb triplet, used with alpha */
+
+  /* Type: marquee display, 80s script accent, typewriter labels, serif for reading */
+  --font-display: 'Limelight', Georgia, serif;
+  --font-script: 'Yellowtail', cursive;
+  --font-type: 'Special Elite', 'Courier New', monospace;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+
+  /* Shared surfaces */
+  --gold: linear-gradient(180deg, var(--gold-hi), var(--mustard) 45%, var(--gold-lo));
+  --frame-shadow: 0 24px 40px rgb(0 0 0 / 0.5);
+
+  /* Layout */
+  --curtain-w: clamp(20px, 7vw, 120px);
+  --content-max: 76rem;
+
+  /* Motion: short for feedback, springy for physical objects */
+  --t-fast: 180ms;
+  --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+}

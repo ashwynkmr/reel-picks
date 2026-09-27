@@ -3,6 +3,31 @@
 All notable changes, grouped by development phase. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.3.0] - 2026-09-27 - Phase 2: the movie palace
+
+### Added
+
+- 1984 movie-palace theme from the approved mockup (`docs/design/`): velvet curtains, bulb-lit
+  marquee with searchlights and poster cases, film-strip divider, theatre-carpet end credits.
+- Box office of admission tickets for services; film vault of labelled cans for moods.
+- Silver screen with a film-leader countdown, projector beam over a row of seats, and a projector
+  whose lever is the main button. It jams, with the lamp out, when nothing matches.
+- Result on the screen: generated genre-styled lobby card, clapperboard slate with scene and take,
+  IMDb seal, trailer link styled as an admission ticket.
+- "Intermission" title card for the empty state.
+- Design tokens (`src/styles/tokens.css`) and self-hosted fonts (ADR 0009).
+- axe-core accessibility audit of every screen state; README screenshots.
+
+### Changed
+
+- Result moved from a modal dialog onto the screen (ADR 0008).
+- Changing any filter now clears the screen, so a stale pick never sits beside new counts.
+
+### Fixed
+
+- Screen readers heard "Classics1 reel" on film cans; now "Classics, 1 reel".
+- Box office text contrast raised to WCAG AA.
+
 ## [0.2.0] - 2026-09-27 - Phase 1: core picker
 
 ### Added

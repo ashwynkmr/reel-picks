@@ -30,6 +30,8 @@ export function usePicker(movies: Movie[], random: () => number = Math.random) {
   const [genre, setGenre] = useState<GenreFilter>('any')
   const [pick, setPick] = useState<Movie | null>(null)
   const [recentIds, setRecentIds] = useState<string[]>([])
+  /** How many picks this session: the "take" number on the clapperboard. */
+  const [take, setTake] = useState(0)
 
   const candidates = useMemo(() => filterMovies(movies, platforms, genre), [movies, platforms, genre])
   const fix = useMemo(
@@ -37,9 +39,13 @@ export function usePicker(movies: Movie[], random: () => number = Math.random) {
     [candidates.length, movies, platforms, genre],
   )
 
+  // Changing the question clears the answer: a card picked under the old
+  // filters would otherwise sit on screen while the lever shows new counts.
+
   /** Toggles a platform, but never lets the last one be switched off. */
   const togglePlatform = useCallback(
     (id: PlatformId) => {
+      setPick(null)
       setPlatforms((current) => {
         if (!current.includes(id)) return ALL_PLATFORM_IDS.filter((p) => p === id || current.includes(p))
         return current.length > 1 ? current.filter((p) => p !== id) : current
@@ -49,14 +55,23 @@ export function usePicker(movies: Movie[], random: () => number = Math.random) {
   )
 
   const addPlatform = useCallback(
-    (id: PlatformId) => setPlatforms((current) => ALL_PLATFORM_IDS.filter((p) => p === id || current.includes(p))),
+    (id: PlatformId) => {
+      setPick(null)
+      setPlatforms((current) => ALL_PLATFORM_IDS.filter((p) => p === id || current.includes(p)))
+    },
     [setPlatforms],
   )
+
+  const chooseGenre = useCallback((id: GenreFilter) => {
+    setPick(null)
+    setGenre(id)
+  }, [])
 
   const spin = useCallback(() => {
     const next = pickMovie(candidates, recentIds, random)
     if (!next) return
     setPick(next)
+    setTake((t) => t + 1)
     setRecentIds((ids) => rememberPick(ids, next.id))
   }, [candidates, recentIds, random])
 
@@ -67,10 +82,11 @@ export function usePicker(movies: Movie[], random: () => number = Math.random) {
     genre,
     candidates,
     pick,
+    take,
     fix,
     togglePlatform,
     addPlatform,
-    setGenre,
+    setGenre: chooseGenre,
     spin,
     closePick,
   }

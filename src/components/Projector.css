@@ -1,0 +1,65 @@
+.projector {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.projector svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.projector__reel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: projector-spin 7s linear infinite;
+}
+
+.projector__reel--fast {
+  animation-duration: 5s;
+}
+
+@keyframes projector-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The lever pivots at its base; it tilts on hover and snaps down on press. */
+.projector__lever {
+  transform-box: view-box;
+  transform-origin: 262px 150px;
+  transition: transform 300ms var(--ease-spring);
+}
+
+.projector:hover:not(:disabled) .projector__lever,
+.projector:focus-visible .projector__lever {
+  transform: rotate(22deg);
+}
+
+.projector:active:not(:disabled) .projector__lever {
+  transform: rotate(60deg);
+  transition-duration: 90ms;
+}
+
+/* No films match: the lever is jammed and the lamp is out. */
+.projector:disabled {
+  cursor: not-allowed;
+}
+
+.projector:disabled .projector__lever {
+  transform: rotate(-8deg);
+  filter: saturate(0.3);
+}
+
+.projector:disabled .projector__reel {
+  animation-play-state: paused;
+}
+
+.projector:disabled .projector__lens {
+  fill: #6b6356;
+}

@@ -1,0 +1,73 @@
+.curtain {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: var(--curtain-w);
+  z-index: 40;
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.35), transparent 30%, transparent 70%, rgb(0 0 0 / 0.35)) 0 0 / 34px 100%,
+    repeating-linear-gradient(
+      90deg,
+      var(--curtain-dark) 0 4px,
+      var(--curtain-deep) 10px,
+      var(--curtain) 18px,
+      #b5544a 22px,
+      var(--curtain) 26px,
+      var(--curtain-deep) 32px,
+      var(--curtain-dark) 34px
+    );
+  box-shadow: 0 0 40px rgb(0 0 0 / 0.7);
+}
+
+.curtain--left {
+  left: 0;
+  border-bottom-right-radius: 40% 12%;
+}
+
+.curtain--right {
+  right: 0;
+  border-bottom-left-radius: 40% 12%;
+}
+
+/* gold rope tie-back */
+.curtain::after {
+  content: '';
+  position: absolute;
+  top: 58%;
+  width: 120%;
+  height: 10px;
+  background: var(--gold);
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.5);
+}
+
+.curtain--left::after {
+  left: -10%;
+  transform: rotate(-8deg);
+}
+
+.curtain--right::after {
+  right: -10%;
+  transform: rotate(8deg);
+}
+
+.valance {
+  position: relative;
+  z-index: 41;
+  height: 64px;
+  background:
+    radial-gradient(ellipse at 50% 0%, var(--curtain) 0 60%, transparent 61%) 0 0 / 160px 64px repeat-x,
+    linear-gradient(var(--curtain-deep), var(--curtain-deep)) 0 0 / 100% 20px no-repeat;
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.5));
+}
+
+/* gold fringe along the scallops */
+.valance::after {
+  content: '';
+  position: absolute;
+  inset: 36px 0 auto;
+  height: 16px;
+  background: radial-gradient(ellipse at 50% 0%, transparent 0 58%, var(--mustard) 59% 64%, transparent 65%) 0 -24px /
+    160px 64px repeat-x;
+  opacity: 0.9;
+}
