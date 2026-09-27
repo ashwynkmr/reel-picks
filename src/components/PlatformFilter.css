@@ -1,0 +1,180 @@
+/* Shared booth shape for the box office and the film vault: arched top, brass trim. */
+.kiosk {
+  position: relative;
+  padding: 1.2rem;
+  border-radius: 999px 999px 10px 10px / 140px 140px 10px 10px;
+  box-shadow:
+    0 0 0 4px var(--gold-lo),
+    0 0 0 8px var(--brown),
+    var(--frame-shadow);
+}
+
+.box-office {
+  background:
+    repeating-linear-gradient(135deg, rgb(209 165 70 / 0.07) 0 2px, transparent 2px 14px),
+    /* starts a shade darker than --teal so the cream and gold text keeps 4.5:1 contrast */
+    linear-gradient(180deg, #3f635d, var(--teal-deep));
+}
+
+.box-office__fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.box-office__fieldset > legend {
+  width: 100%;
+  padding: 0;
+}
+
+/* The glass window: dark, with a couple of reflections and brass trim. */
+.box-office__window {
+  padding: 0.7rem 0.9rem 1.1rem;
+  border-radius: 8px;
+  background:
+    linear-gradient(
+      115deg,
+      rgb(255 255 255 / 0.1) 0 18%,
+      transparent 18% 30%,
+      rgb(255 255 255 / 0.06) 30% 36%,
+      transparent 36%
+    ),
+    linear-gradient(180deg, #1f2a28, #151c1b);
+  box-shadow:
+    inset 0 0 0 3px var(--gold-lo),
+    inset 0 10px 30px rgb(0 0 0 / 0.6);
+}
+
+.box-office__grille {
+  width: 60px;
+  height: 22px;
+  margin: 0 auto 0.8rem;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, var(--mustard) 0 1.5px, transparent 1.5px 5px);
+  opacity: 0.8;
+}
+
+.box-office__prices {
+  min-height: 1.2em;
+  margin: 0.9rem 0 0;
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold-hi);
+}
+
+.box-office__prices > span {
+  display: inline-flex;
+  gap: 1.4rem;
+}
+
+/* ---------- Tickets ---------- */
+
+.tickets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem 0.6rem;
+}
+
+.ticket {
+  --ticket: var(--cream);
+  position: relative;
+  display: flex;
+  background: var(--ticket);
+  color: var(--brown);
+  border-radius: 3px;
+  cursor: pointer;
+  transform: rotate(var(--tilt, 0deg));
+  transition:
+    transform var(--t-fast) var(--ease-spring),
+    opacity var(--t-fast),
+    box-shadow var(--t-fast);
+  box-shadow: 0 5px 10px rgb(0 0 0 / 0.45);
+  /* half-circle notches cut into both short edges */
+  mask:
+    radial-gradient(circle at 0 50%, transparent 6px, #000 6.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 6px, #000 6.5px) right / 51% 100% no-repeat;
+}
+
+.ticket:hover {
+  transform: rotate(0deg) translateY(-4px) scale(1.03);
+}
+
+.ticket:has(:focus-visible) {
+  outline: 3px solid var(--gold-hi);
+  outline-offset: 3px;
+  mask: none;
+}
+
+.ticket:has(:disabled) {
+  cursor: not-allowed;
+}
+
+.ticket__stub {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 0.4rem 0.25rem;
+  font-family: var(--font-type);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  border-left: 2px dashed rgb(58 46 38 / 0.35);
+  opacity: 0.75;
+}
+
+.ticket__body {
+  flex: 1;
+  display: grid;
+  padding: 0.45rem 0.5rem 0.8rem;
+  margin: 3px 3px 3px 0;
+  text-align: center;
+  border: 1px solid rgb(58 46 38 / 0.25);
+}
+
+.ticket__admit {
+  font-family: var(--font-type);
+  font-size: 0.52rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.ticket__name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.ticket.is-on {
+  --ticket: var(--mustard);
+  box-shadow:
+    0 5px 10px rgb(0 0 0 / 0.45),
+    0 0 18px rgb(255 214 130 / 0.35);
+}
+
+/* the "ADMIT" rubber stamp on selected tickets */
+.ticket.is-on::after {
+  content: 'ADMIT';
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.2rem;
+  padding: 0 0.2rem;
+  font-family: var(--font-type);
+  font-size: 0.48rem;
+  color: var(--curtain-deep);
+  border: 1.5px solid var(--curtain-deep);
+  transform: rotate(-8deg);
+  opacity: 0.85;
+}
+
+.ticket.is-off {
+  opacity: 0.45;
+  filter: saturate(0.3);
+}
+
+@media (max-width: 560px) {
+  .tickets {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
