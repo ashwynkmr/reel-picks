@@ -97,3 +97,32 @@ export function platformLabel(id: PlatformId): string {
 export function genreLabel(id: GenreFilter): string {
   return GENRE_FILTERS.find((g) => g.id === id)?.label ?? id
 }
+
+/** How many frames spin past before the pick lands. Enough to feel like a spin at ~2.4 s. */
+export const REEL_LENGTH = 16
+
+/**
+ * Builds the strip of frames the reel spins through: random films from the
+ * current pool, ending on the pick. Frames next to each other are never the
+ * same film (when the pool allows), so the blur reads as motion rather than
+ * a stutter. The pick is always the last frame.
+ */
+export function buildReel(
+  candidates: Movie[],
+  pick: Movie,
+  length: number = REEL_LENGTH,
+  random: () => number = Math.random,
+): Movie[] {
+  const frames: Movie[] = []
+  for (let i = 0; i < length - 1; i++) {
+    const previous = frames.at(-1)
+    const pool = candidates.length > 1 ? candidates.filter((m) => m.id !== previous?.id) : candidates
+    frames.push(pool[Math.floor(random() * pool.length)])
+  }
+  // Don't let the frame right before the pick be the pick itself.
+  if (frames.at(-1)?.id === pick.id && candidates.length > 1) {
+    frames[frames.length - 1] = candidates.find((m) => m.id !== pick.id) ?? pick
+  }
+  frames.push(pick)
+  return frames
+}

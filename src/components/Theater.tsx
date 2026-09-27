@@ -7,6 +7,8 @@ interface Props {
   /** What's on the silver screen: the countdown, an empty state, or the result. */
   screen: ReactNode
   canPull: boolean
+  /** A spin is playing: brighter, flickering beam and a held-down lever. */
+  rolling: boolean
   onPull: () => void
   hint: ReactNode
 }
@@ -21,10 +23,13 @@ const SEAT_COUNT = 14
  * The ref points at the screen so the app can scroll it into view when a
  * film is picked.
  */
-export const Theater = forwardRef<HTMLDivElement, Props>(function Theater({ screen, canPull, onPull, hint }, ref) {
+export const Theater = forwardRef<HTMLDivElement, Props>(function Theater(
+  { screen, canPull, rolling, onPull, hint },
+  ref,
+) {
   return (
     <section className="theater" aria-label="Screen">
-      <div className={`theater__beam ${canPull ? '' : 'is-off'}`} aria-hidden="true" />
+      <div className={`theater__beam ${canPull ? '' : 'is-off'} ${rolling ? 'is-rolling' : ''}`} aria-hidden="true" />
       <div className="theater__proscenium">
         <div ref={ref} className="theater__screen" aria-live="polite">
           {screen}
@@ -38,7 +43,7 @@ export const Theater = forwardRef<HTMLDivElement, Props>(function Theater({ scre
       <div className="theater__booth">
         <DirectorsChair />
         <div className="theater__lever">
-          <Projector disabled={!canPull} onPull={onPull} describedBy="lever-hint" />
+          <Projector disabled={!canPull} rolling={rolling} onPull={onPull} describedBy="lever-hint" />
           <p id="lever-hint" className="theater__hint">
             {hint}
           </p>

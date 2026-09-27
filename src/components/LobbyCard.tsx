@@ -9,7 +9,7 @@ import './LobbyCard.css'
 export function LobbyCard({ movie }: { movie: Movie }) {
   return (
     <div className="lobby-card" data-genre={movie.genres[0]} aria-hidden="true">
-      <div className="lobby-card__art" />
+      <div className="lobby-card__art genre-art" data-genre={movie.genres[0]} />
       {movie.classic && <div className="lobby-card__ribbon">Classic</div>}
       <div className="lobby-card__title">{movie.title}</div>
       <div className="lobby-card__year">{movie.year}</div>

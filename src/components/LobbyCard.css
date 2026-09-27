@@ -27,42 +27,8 @@
   pointer-events: none;
 }
 
-/* Genre art. Muted versions of classic poster tropes. */
-.lobby-card[data-genre='action'] .lobby-card__art {
-  background:
-    radial-gradient(circle at 50% 40%, #f0b35a 0 10%, #c9542f 25%, transparent 55%),
-    repeating-conic-gradient(from 0deg at 50% 40%, rgb(0 0 0 / 0.15) 0 8deg, transparent 8deg 20deg),
-    linear-gradient(180deg, #4a1c18, #1f0f0c);
-}
-
-.lobby-card[data-genre='comedy'] .lobby-card__art {
-  background:
-    radial-gradient(circle at 50% 42%, #fff1c4 0 9%, transparent 10%),
-    repeating-conic-gradient(from 0deg at 50% 42%, #d1a546 0 10deg, #e4bd61 10deg 20deg), #d1a546;
-}
-
 .lobby-card[data-genre='comedy'] {
   --ink: var(--brown);
-}
-
-.lobby-card[data-genre='drama'] .lobby-card__art {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgb(255 231 168 / 0.55) 0 20%, transparent 60%),
-    linear-gradient(180deg, #2f4a46, #14201e);
-}
-
-/* thriller: film-noir venetian-blind shadows */
-.lobby-card[data-genre='thriller'] .lobby-card__art {
-  background:
-    repeating-linear-gradient(-20deg, rgb(0 0 0 / 0.55) 0 10px, transparent 10px 22px),
-    radial-gradient(circle at 70% 30%, #a3453b 0 18%, transparent 55%), linear-gradient(180deg, #2b2622, #0f0d0c);
-}
-
-.lobby-card[data-genre='scifi'] .lobby-card__art {
-  background:
-    radial-gradient(circle at 50% 38%, #6fbf73 0 8%, transparent 45%),
-    repeating-linear-gradient(90deg, transparent 0 10px, rgb(111 191 115 / 0.25) 10px 11px),
-    linear-gradient(180deg, #16241c, #0c120f);
 }
 
 .lobby-card__ribbon {

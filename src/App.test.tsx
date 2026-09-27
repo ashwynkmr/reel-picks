@@ -1,7 +1,9 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { act } from 'react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import App from './App.tsx'
+import { DEFAULT_TIMING, INSTANT } from './hooks/usePicker.ts'
 import type { Catalogue, Movie } from './domain/catalogue.ts'
 
 const movie = (id: string, title: string, overrides: Partial<Movie>): Movie => ({
@@ -32,7 +34,7 @@ const first = () => 0
 
 function setup() {
   const user = userEvent.setup()
-  render(<App catalogue={catalogue} random={first} />)
+  render(<App catalogue={catalogue} random={first} timing={INSTANT} />)
   return { user }
 }
 
@@ -127,5 +129,79 @@ describe('Reel Picks', () => {
     await user.click(document.body)
     await user.keyboard(' ')
     expect(card()).toBeInTheDocument()
+  })
+})
+
+describe('the reveal sequence', () => {
+  afterEach(() => vi.useRealTimers())
+
+  function setupAnimated() {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    render(<App catalogue={catalogue} random={first} timing={DEFAULT_TIMING} />)
+    return { user }
+  }
+
+  it('rolls the reel, snaps the slate, then lands the card', async () => {
+    const { user } = setupAnimated()
+    await user.click(lever())
+
+    expect(screen.getByText('Rolling film…', { selector: '.visually-hidden' })).toBeInTheDocument()
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Skip to the result' })).toBeInTheDocument()
+
+    act(() => vi.advanceTimersByTime(DEFAULT_TIMING.rollMs))
+    expect(screen.getByText('And… action.')).toBeInTheDocument()
+
+    act(() => vi.advanceTimersByTime(DEFAULT_TIMING.slateMs))
+    expect(card()).toBeInTheDocument()
+    expect(lever()).toBeInTheDocument()
+  })
+
+  it('can be skipped with the Skip button', async () => {
+    const { user } = setupAnimated()
+    await user.click(lever())
+    await user.click(screen.getByRole('button', { name: /Skip ›/ }))
+    expect(card()).toBeInTheDocument()
+  })
+
+  it('can be skipped by pulling the lever again', async () => {
+    const { user } = setupAnimated()
+    await user.click(lever())
+    await user.click(screen.getByRole('button', { name: 'Skip to the result' }))
+    expect(card()).toBeInTheDocument()
+  })
+
+  it('is cancelled by Esc, and never lands afterwards', async () => {
+    const { user } = setupAnimated()
+    await user.click(lever())
+    await user.keyboard('{Escape}')
+    act(() => vi.advanceTimersByTime(DEFAULT_TIMING.rollMs + DEFAULT_TIMING.slateMs))
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+    expect(screen.getByText('Pull the lever to roll film')).toBeInTheDocument()
+  })
+
+  it('is cancelled by a filter change', async () => {
+    const { user } = setupAnimated()
+    await user.click(lever())
+    await user.click(screen.getByRole('radio', { name: /Drama/ }))
+    act(() => vi.advanceTimersByTime(DEFAULT_TIMING.rollMs + DEFAULT_TIMING.slateMs))
+    expect(screen.queryByRole('article')).not.toBeInTheDocument()
+  })
+
+  it('skips the animation entirely for reduced-motion users', async () => {
+    const matchMedia = window.matchMedia
+    window.matchMedia = ((query: string) => ({
+      matches: query.includes('reduce'),
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    })) as unknown as typeof window.matchMedia
+    try {
+      const { user } = setupAnimated()
+      await user.click(lever())
+      expect(card()).toBeInTheDocument()
+    } finally {
+      window.matchMedia = matchMedia
+    }
   })
 })

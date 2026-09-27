@@ -1,7 +1,10 @@
 import './Projector.css'
 
 interface Props {
+  /** No films match: the lever is jammed. */
   disabled: boolean
+  /** A spin is playing: the lever is held down and the reels race. Pressing it again skips. */
+  rolling: boolean
   onPull: () => void
   describedBy?: string
 }
@@ -11,14 +14,14 @@ interface Props {
  * The whole illustration is one <button>, so it's a large, obvious target
  * on touch screens and works with Enter/Space like any button.
  */
-export function Projector({ disabled, onPull, describedBy }: Props) {
+export function Projector({ disabled, rolling, onPull, describedBy }: Props) {
   return (
     <button
       type="button"
-      className="projector"
+      className={`projector ${rolling ? 'is-rolling' : ''}`}
       onClick={onPull}
       disabled={disabled}
-      aria-label="Pull the lever"
+      aria-label={rolling ? 'Skip to the result' : 'Pull the lever'}
       aria-describedby={describedBy}
     >
       <svg viewBox="0 0 300 220" width="300" aria-hidden="true">

@@ -8,11 +8,14 @@ import { GenreFilter } from './components/GenreFilter.tsx'
 import { Marquee } from './components/Marquee.tsx'
 import { MovieCard } from './components/MovieCard.tsx'
 import { PlatformFilter } from './components/PlatformFilter.tsx'
+import { ReelSpinner } from './components/ReelSpinner.tsx'
+import { SlateSnap } from './components/SlateSnap.tsx'
 import { Theater } from './components/Theater.tsx'
 import shippedCatalogue from './data/catalogue.json'
 import type { Catalogue } from './domain/catalogue.ts'
 import { genreLabel } from './domain/picker.ts'
-import { usePicker } from './hooks/usePicker.ts'
+import { DEFAULT_TIMING, INSTANT, usePicker, type RevealTiming } from './hooks/usePicker.ts'
+import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion.ts'
 import './App.css'
 
 /** Elements where Space already means something (typing, pressing, ticking). */
@@ -22,16 +25,18 @@ interface Props {
   /** Injectable for tests; defaults to the shipped catalogue. */
   catalogue?: Catalogue
   random?: () => number
+  /** Reveal timing; tests pass INSTANT. Reduced-motion users always get INSTANT. */
+  timing?: RevealTiming
 }
 
-function prefersReducedMotion(): boolean {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
-}
-
-function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
-  const picker = usePicker(catalogue.movies, random)
-  const { spin, closePick, candidates, pick } = picker
+function App({ catalogue = shippedCatalogue as Catalogue, random, timing = DEFAULT_TIMING }: Props) {
+  const reducedMotion = usePrefersReducedMotion()
+  const effectiveTiming = reducedMotion ? INSTANT : timing
+  const picker = usePicker(catalogue.movies, { random, timing: effectiveTiming })
+  const { spin, skip, closePick, candidates, pick, phase } = picker
   const canSpin = candidates.length > 0
+  const busy = phase === 'rolling' || phase === 'slating'
+  const scrollBehavior: ScrollBehavior = reducedMotion ? 'auto' : 'smooth'
 
   const screenRef = useRef<HTMLDivElement>(null)
   const filtersRef = useRef<HTMLDivElement>(null)
@@ -39,17 +44,21 @@ function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
   /** Pull the lever and bring the screen into view (it can be below the fold on phones). */
   const pull = useCallback(() => {
     spin()
-    screenRef.current?.scrollIntoView?.({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
-  }, [spin])
+    screenRef.current?.scrollIntoView?.({ block: 'center', behavior: scrollBehavior })
+  }, [spin, scrollBehavior])
+
+  /** The lever (and Space) pulls when idle, and skips ahead while a spin is playing. */
+  const onLever = useCallback(() => (busy ? skip() : pull()), [busy, skip, pull])
 
   /** Clear the screen and take the user back up to the filters. */
   const changeFilters = useCallback(() => {
     closePick()
-    filtersRef.current?.scrollIntoView?.({ block: 'start', behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+    filtersRef.current?.scrollIntoView?.({ block: 'start', behavior: scrollBehavior })
     filtersRef.current?.querySelector<HTMLInputElement>('input:not(:disabled)')?.focus({ preventScroll: true })
-  }, [closePick])
+  }, [closePick, scrollBehavior])
 
-  // Space pulls the lever from anywhere that doesn't already use Space; Esc clears the screen.
+  // Space pulls the lever (or skips a spin) from anywhere that doesn't already
+  // use Space; Esc clears the screen, cancelling a spin in progress.
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape' && pick) {
@@ -60,22 +69,21 @@ function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
       if (event.key !== ' ' || event.repeat) return
       if (event.target instanceof Element && event.target.closest(SPACE_CONSUMERS)) return
       event.preventDefault()
-      pull()
+      onLever()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [pull, closePick, pick])
+  }, [onLever, closePick, pick])
 
+  const scene = genreLabel(picker.genre)
   let screen
-  if (pick) {
+  if (pick && phase === 'rolling') {
+    screen = <ReelSpinner key={picker.take} frames={picker.reel} durationMs={effectiveTiming.rollMs} onSkip={skip} />
+  } else if (pick && phase === 'slating') {
+    screen = <SlateSnap scene={scene} take={picker.take} durationMs={effectiveTiming.slateMs} />
+  } else if (pick) {
     screen = (
-      <MovieCard
-        movie={pick}
-        take={picker.take}
-        scene={genreLabel(picker.genre)}
-        onSpinAgain={pull}
-        onChangeFilters={changeFilters}
-      />
+      <MovieCard movie={pick} take={picker.take} scene={scene} onSpinAgain={pull} onChangeFilters={changeFilters} />
     )
   } else if (!canSpin && picker.fix) {
     screen = (
@@ -91,7 +99,9 @@ function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
     screen = <CountdownLeader />
   }
 
-  const hint = canSpin ? (
+  const hint = busy ? (
+    'Rolling film…'
+  ) : canSpin ? (
     <>
       {candidates.length} {candidates.length === 1 ? 'reel' : 'reels'} loaded
       <span className="theater__key-hint">
@@ -106,7 +116,7 @@ function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
   return (
     <>
       <Curtains />
-      <div className="stage">
+      <div className="stage" data-phase={phase}>
         <Marquee />
         <FilmStrip />
 
@@ -121,7 +131,7 @@ function App({ catalogue = shippedCatalogue as Catalogue, random }: Props) {
             />
           </div>
 
-          <Theater ref={screenRef} screen={screen} canPull={canSpin} onPull={pull} hint={hint} />
+          <Theater ref={screenRef} screen={screen} canPull={canSpin} rolling={busy} onPull={onLever} hint={hint} />
         </main>
 
         <Credits catalogue={catalogue} />

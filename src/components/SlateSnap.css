@@ -1,0 +1,111 @@
+.slate-snap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: inherit;
+  padding: 1.5rem;
+  background: radial-gradient(ellipse at 50% 50%, #3a332d, #151210 75%);
+  overflow: hidden;
+}
+
+.slate-snap__board {
+  width: min(400px, 88%);
+  animation: slate-in var(--slate-ms) var(--ease-spring) both;
+}
+
+/* The striped stick, hinged at its left end, starts open and claps shut. */
+.slate-snap__stick {
+  height: 34px;
+  margin-bottom: 4px;
+  border-radius: 4px 4px 0 0;
+  background: repeating-linear-gradient(-55deg, #1f1b18 0 22px, var(--cream) 22px 44px);
+  box-shadow: 0 0 0 2px #0c0a09;
+  transform-origin: 6px 100%;
+  animation: slate-clap var(--slate-ms) both;
+}
+
+.slate-snap__body {
+  padding: 0.9rem 1.1rem 1rem;
+  background: #1f1b18;
+  border-radius: 0 0 6px 6px;
+  box-shadow:
+    0 0 0 2px #0c0a09,
+    0 16px 30px rgb(0 0 0 / 0.5);
+  color: var(--cream);
+  font-family: var(--font-type);
+  text-transform: uppercase;
+}
+
+.slate-snap__row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+.slate-snap__row--title {
+  display: block;
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(239 228 207 / 0.3);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  text-align: center;
+  letter-spacing: 0.12em;
+}
+
+.slate-snap__row span {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  opacity: 0.55;
+}
+
+/* White flash at the moment of the clap, like a camera catching the sync frame. */
+.slate-snap__flash {
+  position: absolute;
+  inset: 0;
+  background: #fffaf0;
+  opacity: 0;
+  pointer-events: none;
+  animation: slate-flash var(--slate-ms) both;
+}
+
+@keyframes slate-in {
+  from {
+    transform: translateY(24px) scale(0.92);
+    opacity: 0;
+  }
+  30% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes slate-clap {
+  0%,
+  30% {
+    transform: rotate(-24deg);
+  }
+  55% {
+    transform: rotate(2deg);
+  }
+  62%,
+  100% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes slate-flash {
+  0%,
+  54% {
+    opacity: 0;
+  }
+  58% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
+}

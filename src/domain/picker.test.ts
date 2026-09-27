@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Movie } from './catalogue.ts'
-import { filterMovies, pickMovie, rememberPick, RECENT_PICKS_TO_AVOID, suggestFix } from './picker.ts'
+import { buildReel, filterMovies, pickMovie, rememberPick, RECENT_PICKS_TO_AVOID, suggestFix } from './picker.ts'
 
 const movie = (id: string, overrides: Partial<Movie> = {}): Movie => ({
   id,
@@ -90,5 +90,24 @@ describe('suggestFix', () => {
   it('suggests "any genre" when the current platforms have other films', () => {
     expect(suggestFix(all, ['netflix'], 'classics').tryAnyGenre).toBe(true)
     expect(suggestFix(all, ['appletv'], 'classics').tryAnyGenre).toBe(false)
+  })
+})
+
+describe('buildReel', () => {
+  it('ends on the pick and has the requested length', () => {
+    const reel = buildReel(all, alien, 10, fixed(0))
+    expect(reel).toHaveLength(10)
+    expect(reel.at(-1)).toBe(alien)
+  })
+
+  it('never shows the same film in two neighbouring frames', () => {
+    let n = 0
+    const cycling = () => [0, 0.3, 0.6, 0.9][n++ % 4]
+    const reel = buildReel(all, matrix, 30, cycling)
+    for (let i = 1; i < reel.length; i++) expect(reel[i].id).not.toBe(reel[i - 1].id)
+  })
+
+  it('works with a single-film pool', () => {
+    expect(buildReel([matrix], matrix, 4)).toEqual([matrix, matrix, matrix, matrix])
   })
 })

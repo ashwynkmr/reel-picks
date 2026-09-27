@@ -3,6 +3,28 @@
 All notable changes, grouped by development phase. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.4.0] - 2026-09-27 - Phase 3: the reveal
+
+### Added
+
+- The spin: 16 frames from the current pool race through the projector gate with motion blur,
+  decelerate, overshoot slightly and settle on the pick (2.4 s).
+- Clapperboard snap between spin and card, marked with scene and take, with a sync flash (0.65 s).
+- Card landing: the card settles, the poster drops in, the IMDb seal stamps down.
+- While spinning: lever held down, reels race, lamp brightens, beam flickers, marquee bulbs speed up.
+- Skip at any time with the Skip button, the lever or Space; Esc or a filter change cancels.
+- Reduced-motion users get the card instantly; the OS setting is tracked live.
+- Phase machine in `usePicker` with cancellable timers; `buildReel` domain function; fake-timer
+  tests for the whole sequence (46 tests total). Spin GIF in the README.
+
+### Changed
+
+- ADR 0010 replaces the planned animation library with CSS keyframes (0 KB added).
+
+### Fixed
+
+- Poster cases beside the marquee overlapped between 900 and 1100 px wide (PR #4).
+
 ## [0.3.0] - 2026-09-27 - Phase 2: the movie palace
 
 ### Added
