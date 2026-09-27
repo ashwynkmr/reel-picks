@@ -89,7 +89,7 @@ open like a clapperboard into a script-page card; light grain and vignette.
 | Phase | Scope                                                                                  | Gate                                         | Status  |
 | ----- | -------------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
 | 0     | Scaffold, tooling, CI/CD, curated catalogue, validator, product docs                   | Every record valid; coverage grid reviewed   | Done    |
-| 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Next    |
-| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Planned |
+| 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Done    |
+| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Next    |
 | 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Planned |
 | 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Planned |

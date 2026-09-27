@@ -3,6 +3,20 @@
 All notable changes, grouped by development phase. Format based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/).
 
+## [0.2.0] - 2026-09-27 - Phase 1: core picker
+
+### Added
+
+- Platform filter (multi-select, remembered between visits, can't switch off the last one).
+- Genre filter with Any, five genres and Classics, each showing how many films it would draw from.
+- Random pick that avoids the last five picks (ADR 0006), via a `usePicker` hook over pure logic.
+- Result card in a native modal `<dialog>`: rating with star meter, synopsis, genres, services,
+  trailer and IMDb links. Esc closes; focus starts on "Watch the trailer".
+- Empty state that names the gap and offers one-tap fixes: add a service or try any genre (ADR 0007).
+- Space pulls the lever from anywhere that doesn't already use Space.
+- Footer with the availability snapshot date and a link to report a film that moved.
+- Integration tests for the full flow with Testing Library (32 tests total).
+
 ## [0.1.0] - 2026-09-27 - Phase 0: setup and data
 
 ### Added

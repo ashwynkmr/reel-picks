@@ -41,6 +41,8 @@ fast, so I can stop choosing and start watching._
 | [Classics as a flag, not a genre](docs/decisions/0004-classics-as-a-flag.md)           | A classic still appears under its real genre; small UI/data mismatch, documented.                     |
 | [Trailer links via YouTube search](docs/decisions/0003-trailer-search-links.md)        | Never a dead link; one extra click when no verified id exists.                                        |
 | [React + Vite on GitHub Pages](docs/decisions/0002-react-vite-github-pages.md)         | Easy reel-to-card animation and typed data; costs a build step and ~75 KB.                            |
+| [Skip the last five picks on re-spin](docs/decisions/0006-avoid-recent-repeats.md)     | Spins feel fresh; gives up strict randomness, which nobody wanted.                                    |
+| [Empty states offer a one-tap fix](docs/decisions/0007-empty-states-offer-a-fix.md)    | No dead ends; suggesting other services could read as an upsell.                                      |
 
 ## What I'd measure
 
@@ -53,8 +55,8 @@ Details and the riskiest assumptions: [problem and opportunity](docs/product/pro
 | Phase | Scope                                                        | Status  |
 | ----- | ------------------------------------------------------------ | ------- |
 | 0     | Scaffold, CI/CD, curated catalogue + validator, product docs | Done    |
-| 1     | Working picker: filters, no-repeat random pick, result card  | Next    |
-| 2     | 80s look: marquee, ticket and film-can filters, projector    | Planned |
+| 1     | Working picker: filters, no-repeat random pick, result card  | Done    |
+| 2     | 80s look: marquee, ticket and film-can filters, projector    | Next    |
 | 3     | Motion: film-strip spin, lever, clapperboard reveal          | Planned |
 | 4     | Polish: mobile, accessibility, sound, ~150 films, launch     | Planned |
 
@@ -81,11 +83,13 @@ Spot a film that moved platforms? [Open a catalogue correction](https://github.c
 ## Tech
 
 React 19, TypeScript (strict), Vite, Vitest, oxlint, Prettier. GitHub Actions runs lint, format,
-typecheck, tests, data validation and a build on every PR, and deploys `main` to GitHub Pages.
+typecheck, unit and integration tests (Testing Library), data validation and a build on every PR, and deploys `main` to GitHub Pages.
 
 ```
 src/
-  domain/      Types, platform/genre lists, validation, link helpers (pure, unit-tested)
+  domain/      Pure logic: types, filtering, no-repeat picking, validation, links (unit-tested)
+  hooks/       usePicker (all picker state), usePersistentState (safe localStorage)
+  components/  Filters, empty state, result card (native <dialog>)
   data/        catalogue.json, the curated movie list
 scripts/       validate-catalogue.ts (CLI used in CI)
 docs/          PRD, problem and opportunity, decision log
