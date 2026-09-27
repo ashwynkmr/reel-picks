@@ -2,11 +2,17 @@ import { useEffect, useRef } from 'react'
 import type { Movie } from '../domain/catalogue.ts'
 import { imdbUrl, trailerUrl } from '../domain/links.ts'
 import { genreLabel, platformLabel } from '../domain/picker.ts'
+import { LobbyCard } from './LobbyCard.tsx'
+import './MovieCard.css'
 
 interface Props {
-  movie: Movie | null
+  movie: Movie
+  /** Which pick of the session this is, shown on the clapperboard. */
+  take: number
+  /** The mood that was chosen, shown as the "scene". */
+  scene: string
   onSpinAgain: () => void
-  onClose: () => void
+  onChangeFilters: () => void
 }
 
 function formatRuntime(minutes: number): string {
@@ -22,67 +28,83 @@ function stars(rating: number): string {
 }
 
 /**
- * The result, shown in a native modal <dialog>. Using the platform element
- * gives us focus trapping, Esc to close and a proper modal role for screen
- * readers without extra code. Phase 3 animates it open.
+ * The result, projected onto the silver screen (ADR 0008). On every new
+ * pick, focus moves to the title so screen readers announce the film and
+ * keyboard users land right above the actions.
  */
-export function MovieCard({ movie, onSpinAgain, onClose }: Props) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
+export function MovieCard({ movie, take, scene, onSpinAgain, onChangeFilters }: Props) {
+  const titleRef = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog) return
-    if (movie && !dialog.open) {
-      dialog.showModal()
-      // Start on the primary action. React's autoFocus doesn't render the
-      // HTML attribute, so the dialog would otherwise focus its first link.
-      dialog.querySelector<HTMLElement>('.movie-card__trailer')?.focus()
-    }
-    if (!movie && dialog.open) dialog.close()
-  }, [movie])
+    titleRef.current?.focus({ preventScroll: true })
+  }, [movie.id, take])
 
   return (
-    <dialog ref={dialogRef} className="movie-card" aria-labelledby="movie-card-title" onClose={onClose}>
-      {movie && (
-        <article>
-          <header className="movie-card__header">
-            <p className="movie-card__eyebrow">Now showing</p>
-            <h2 id="movie-card-title">{movie.title}</h2>
-            <p className="movie-card__meta">
-              {movie.year} · {formatRuntime(movie.runtimeMinutes)}
-              {movie.classic && <span className="movie-card__badge">Classic</span>}
-            </p>
-          </header>
+    <article className="movie-card" aria-labelledby="movie-card-title">
+      <LobbyCard movie={movie} />
 
-          <p className="movie-card__rating">
-            <a href={imdbUrl(movie)} target="_blank" rel="noreferrer">
-              <span aria-hidden="true">{stars(movie.imdbRating)} </span>
-              <strong>{movie.imdbRating.toFixed(1)}</strong>/10 on IMDb
-            </a>
-          </p>
-
-          <p className="movie-card__synopsis">{movie.synopsis}</p>
-
-          <dl className="movie-card__details">
-            <dt>Genre</dt>
-            <dd>{movie.genres.map(genreLabel).join(', ')}</dd>
-            <dt>Streaming on</dt>
-            <dd>{movie.platforms.map(platformLabel).join(', ')}</dd>
-          </dl>
-
-          <div className="movie-card__actions">
-            <a className="movie-card__trailer" href={trailerUrl(movie)} target="_blank" rel="noreferrer">
-              Watch the trailer <span className="visually-hidden">(opens YouTube in a new tab)</span>
-            </a>
-            <button type="button" onClick={onSpinAgain}>
-              Spin again
-            </button>
-            <button type="button" onClick={() => dialogRef.current?.close()}>
-              Change filters
-            </button>
+      <div className="movie-card__body">
+        <div className="slate" aria-hidden="true">
+          <div>
+            <span>Prod.</span>Reel Picks
           </div>
-        </article>
-      )}
-    </dialog>
+          <div>
+            <span>Scene</span>
+            {scene}
+          </div>
+          <div>
+            <span>Take</span>
+            {take}
+          </div>
+        </div>
+
+        <p className="movie-card__eyebrow">Now showing</p>
+        <h2 id="movie-card-title" ref={titleRef} tabIndex={-1}>
+          {movie.title}
+        </h2>
+        <p className="movie-card__meta">
+          {movie.year} · {formatRuntime(movie.runtimeMinutes)}
+          {movie.classic && <span className="movie-card__badge">Classic</span>}
+        </p>
+
+        <a className="movie-card__rating" href={imdbUrl(movie)} target="_blank" rel="noreferrer">
+          <span className="movie-card__seal">
+            {movie.imdbRating.toFixed(1)}
+            <small>IMDb</small>
+          </span>
+          <span>
+            <span className="movie-card__stars" aria-hidden="true">
+              {stars(movie.imdbRating)}
+            </span>
+            <span className="movie-card__rating-src">
+              <span className="visually-hidden">{movie.imdbRating.toFixed(1)} </span>out of 10 on IMDb
+            </span>
+          </span>
+        </a>
+
+        <p className="movie-card__synopsis">{movie.synopsis}</p>
+
+        <ul className="movie-card__chips" aria-label="Genres and services">
+          {movie.genres.map((g) => (
+            <li key={g} className="chip">
+              {genreLabel(g)}
+            </li>
+          ))}
+          <li className="chip chip--platform">Streaming on {movie.platforms.map(platformLabel).join(', ')}</li>
+        </ul>
+
+        <div className="movie-card__actions">
+          <a className="btn btn--ticket" href={trailerUrl(movie)} target="_blank" rel="noreferrer">
+            ▶ Watch the trailer <span className="visually-hidden">(opens YouTube in a new tab)</span>
+          </a>
+          <button type="button" className="btn btn--ghost" onClick={onSpinAgain}>
+            ↻ Spin again
+          </button>
+          <button type="button" className="btn btn--ghost" onClick={onChangeFilters}>
+            Change filters
+          </button>
+        </div>
+      </div>
+    </article>
   )
 }

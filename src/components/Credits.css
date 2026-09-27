@@ -1,0 +1,36 @@
+.credits {
+  margin-top: 2.5rem;
+  padding: 2.2rem 1rem 3rem;
+  text-align: center;
+  font-family: var(--font-type);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  line-height: 2;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  border-top: 4px solid var(--gold-lo);
+  /* 80s theatre carpet: diamonds with gold dots, darkened at the top edge */
+  background:
+    linear-gradient(180deg, var(--booth-deep), rgb(26 22 20 / 0.6) 50%, transparent),
+    radial-gradient(circle at 50% 50%, rgb(209 165 70 / 0.35) 0 3px, transparent 3.5px) 0 0 / 36px 36px,
+    repeating-conic-gradient(from 45deg at 50% 50%, rgb(79 122 116 / 0.35) 0 25%, rgb(110 42 36 / 0.45) 0 50%) 0 0 /
+      36px 36px,
+    #2a1a17;
+}
+
+.credits p {
+  margin: 0;
+}
+
+.credits__title {
+  font-family: var(--font-script);
+  font-size: 1.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--gold-hi);
+}
+
+.credits b {
+  font-weight: 400;
+  color: var(--cream);
+}

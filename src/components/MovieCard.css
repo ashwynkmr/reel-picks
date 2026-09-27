@@ -1,0 +1,242 @@
+.movie-card {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  padding: 1.6rem;
+  background: radial-gradient(ellipse at 50% 40%, #fbf6ea 0%, #e2dccf 60%, #b9b3a6 100%);
+}
+
+.movie-card__body {
+  min-width: 0;
+}
+
+/* ---------- Clapperboard slate ---------- */
+
+.slate {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #1f1b18;
+  color: var(--cream);
+  font-family: var(--font-type);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* the striped clapper stick */
+.slate::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 12px;
+  background: repeating-linear-gradient(-55deg, #1f1b18 0 14px, var(--cream) 14px 28px);
+}
+
+.slate div {
+  padding: 1.05rem 0.7rem 0.4rem;
+  border-right: 1px solid rgb(239 228 207 / 0.25);
+}
+
+.slate div:last-child {
+  border-right: none;
+}
+
+.slate span {
+  display: block;
+  font-size: 0.55rem;
+  opacity: 0.55;
+}
+
+/* ---------- Title block ---------- */
+
+.movie-card__eyebrow {
+  margin: 0;
+  font-family: var(--font-type);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--curtain);
+}
+
+.movie-card h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  line-height: 1.05;
+}
+
+/*
+ * The title receives focus programmatically so screen readers announce a new
+ * pick. It isn't an interactive control, so it doesn't need a focus ring.
+ */
+.movie-card h2:focus {
+  outline: none;
+}
+
+.movie-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.35rem 0 0.8rem;
+  font-family: var(--font-type);
+  font-size: 0.82rem;
+}
+
+.movie-card__badge {
+  padding: 0 0.35rem;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--curtain);
+  border: 1.5px solid var(--curtain);
+  transform: rotate(-3deg);
+}
+
+/* ---------- Rating: gold seal + stars ---------- */
+
+.movie-card__rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.movie-card__seal {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow:
+    0 0 0 3px var(--brown),
+    inset 0 0 0 3px rgb(255 255 255 / 0.3);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--brown);
+}
+
+.movie-card__seal small {
+  display: block;
+  font-family: var(--font-type);
+  font-size: 0.45rem;
+  letter-spacing: 0.15em;
+}
+
+.movie-card__stars {
+  display: block;
+  color: var(--mustard);
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 var(--brown);
+}
+
+.movie-card__rating-src {
+  font-family: var(--font-type);
+  font-size: 0.72rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.75;
+}
+
+.movie-card__synopsis {
+  margin: 0 0 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+/* ---------- Chips + actions ---------- */
+
+.movie-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-type);
+  font-size: 0.72rem;
+}
+
+.chip {
+  padding: 0.12rem 0.5rem;
+  border-radius: 2px;
+  background: rgb(79 122 116 / 0.2);
+  color: var(--teal-deep);
+}
+
+.chip--platform {
+  background: var(--brown);
+  color: var(--cream);
+}
+
+.movie-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn {
+  font-family: var(--font-type);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  border: 0;
+  text-decoration: none;
+  transition: transform var(--t-fast) var(--ease-spring);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* the primary action is a red admission ticket */
+.btn--ticket {
+  padding: 0.7rem 1.2rem 0.7rem 1.4rem;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--curtain);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.15);
+  mask:
+    radial-gradient(circle at 0 50%, transparent 7px, #000 7.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 7px, #000 7.5px) right / 51% 100% no-repeat;
+}
+
+.btn--ticket:focus-visible {
+  mask: none;
+  outline-color: var(--curtain-deep);
+}
+
+.btn--ghost {
+  padding: 0.55rem 0.75rem;
+  color: var(--brown);
+  background: transparent;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1.5px var(--brown);
+}
+
+.btn--ghost:focus-visible {
+  outline-color: var(--curtain);
+}
+
+@media (max-width: 640px) {
+  .movie-card {
+    grid-template-columns: 1fr;
+    padding: 1.2rem;
+  }
+
+  .lobby-card {
+    width: 9rem;
+    margin: 0 auto;
+  }
+}
