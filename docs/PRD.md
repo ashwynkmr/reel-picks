@@ -49,7 +49,7 @@ If nothing matches, the lever jams with a "No reels in the can" message and a su
 | Genre filter    | Single-select plus "Any". Action, Comedy, Drama, Thriller, Sci-Fi, and Classics ([ADR 0004](decisions/0004-classics-as-a-flag.md)).                   |
 | Picker          | Random pick from the filtered set; never repeats any of the last 5 picks while alternatives remain.                                                   |
 | Empty state     | Blocks the spin, explains why, suggests which filter to widen.                                                                                        |
-| Result card     | Title, year, runtime, platform badges, genre tags, classic badge.                                                                                     |
+| Result card     | Shown on the silver screen (ADR 0008): generated poster, title, year, runtime, services, genres, classic badge.                                       |
 | IMDb rating     | Score out of 10 with a star meter; stored snapshot, links to IMDb.                                                                                    |
 | Synopsis        | 2-3 sentences, spoiler-free, max 280 characters.                                                                                                      |
 | Trailer         | Opens the official trailer on YouTube in a new tab ([ADR 0003](decisions/0003-trailer-search-links.md)).                                              |
@@ -90,6 +90,6 @@ open like a clapperboard into a script-page card; light grain and vignette.
 | ----- | -------------------------------------------------------------------------------------- | -------------------------------------------- | ------- |
 | 0     | Scaffold, tooling, CI/CD, curated catalogue, validator, product docs                   | Every record valid; coverage grid reviewed   | Done    |
 | 1     | Filters, `usePicker` hook, no-repeat history, plain result card, empty state, keyboard | Works end to end, unstyled                   | Done    |
-| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Next    |
-| 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Planned |
+| 2     | 80s look: palette, type, marquee, tickets, film cans, projector, grain                 | Look signed off                              | Done    |
+| 3     | Motion: film-strip spin, lever pull, clapperboard card, reduced-motion                 | Spin-to-card feels right on phone and laptop | Next    |
 | 4     | Mobile polish, accessibility pass, sounds, catalogue to ~150, launch                   | Lighthouse a11y ≥ 95; shared publicly        | Planned |
