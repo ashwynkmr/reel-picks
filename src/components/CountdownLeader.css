@@ -66,6 +66,13 @@
   animation: leader-blink 2.4s steps(2) infinite;
 }
 
+@media (max-width: 560px) {
+  .leader__prompt {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
 @keyframes leader-blink {
   50% {
     opacity: 0.4;

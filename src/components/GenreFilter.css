@@ -83,14 +83,16 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 90%;
+  /* tape may overhang the lid a little, the way real tape would */
+  width: 116%;
   padding: 0.18rem 0;
+  white-space: nowrap;
   transform: translate(-50%, -50%) rotate(-5deg);
   background: var(--cream);
   color: var(--brown);
   font-family: var(--font-type);
-  font-size: 0.64rem;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
 }
@@ -99,9 +101,8 @@
   display: block;
   margin-top: 0.3rem;
   font-family: var(--font-type);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   color: var(--cream);
-  opacity: 0.8;
 }
 
 .can.is-on .can__label {
