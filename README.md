@@ -25,22 +25,22 @@ fast, so I can stop choosing and start watching._
 
 ## The product bet
 
-| Principle                 | What it means in the product                                       |
-| ------------------------- | ------------------------------------------------------------------ |
-| One answer, not a list    | The reel lands on a single film. Want another? Pull again.         |
-| Enough to say yes in 10 s | IMDb rating, a spoiler-free synopsis, a trailer. Nothing else.     |
-| Make choosing fun         | The spin is the product: a small dopamine hit instead of a chore.  |
-| Honest about limits       | Availability is a dated snapshot, and the app says so.             |
+| Principle                 | What it means in the product                                      |
+| ------------------------- | ----------------------------------------------------------------- |
+| One answer, not a list    | The reel lands on a single film. Want another? Pull again.        |
+| Enough to say yes in 10 s | IMDb rating, a spoiler-free synopsis, a trailer. Nothing else.    |
+| Make choosing fun         | The spin is the product: a small dopamine hit instead of a chore. |
+| Honest about limits       | Availability is a dated snapshot, and the app says so.            |
 
 ## Key decisions and tradeoffs
 
-| Decision                                                                                | Tradeoff                                                                                               |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| [Hand-curated catalogue, no live API](docs/decisions/0001-static-curated-catalogue.md)  | No backend or keys, every film worth watching; availability can drift, so the snapshot date is shown.  |
-| [Prefer originals and studio-owned films](docs/decisions/0005-prefer-owned-titles.md)   | Snapshot stays accurate for longer; Netflix and Apple TV end up with almost no classics.                |
-| [Classics as a flag, not a genre](docs/decisions/0004-classics-as-a-flag.md)            | A classic still appears under its real genre; small UI/data mismatch, documented.                      |
-| [Trailer links via YouTube search](docs/decisions/0003-trailer-search-links.md)         | Never a dead link; one extra click when no verified id exists.                                          |
-| [React + Vite on GitHub Pages](docs/decisions/0002-react-vite-github-pages.md)          | Easy reel-to-card animation and typed data; costs a build step and ~75 KB.                             |
+| Decision                                                                               | Tradeoff                                                                                              |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [Hand-curated catalogue, no live API](docs/decisions/0001-static-curated-catalogue.md) | No backend or keys, every film worth watching; availability can drift, so the snapshot date is shown. |
+| [Prefer originals and studio-owned films](docs/decisions/0005-prefer-owned-titles.md)  | Snapshot stays accurate for longer; Netflix and Apple TV end up with almost no classics.              |
+| [Classics as a flag, not a genre](docs/decisions/0004-classics-as-a-flag.md)           | A classic still appears under its real genre; small UI/data mismatch, documented.                     |
+| [Trailer links via YouTube search](docs/decisions/0003-trailer-search-links.md)        | Never a dead link; one extra click when no verified id exists.                                        |
+| [React + Vite on GitHub Pages](docs/decisions/0002-react-vite-github-pages.md)         | Easy reel-to-card animation and typed data; costs a build step and ~75 KB.                            |
 
 ## What I'd measure
 
