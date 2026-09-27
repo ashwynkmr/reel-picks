@@ -1,0 +1,27 @@
+.filmstrip {
+  position: relative;
+  height: 46px;
+  margin: 0.5rem 0 2rem;
+  background:
+    radial-gradient(ellipse at center, var(--cream-dim) 0 45%, transparent 50%) 6px 5px / 18px 8px repeat-x,
+    radial-gradient(ellipse at center, var(--cream-dim) 0 45%, transparent 50%) 6px 33px / 18px 8px repeat-x,
+    repeating-linear-gradient(90deg, #26211e 0 80px, #1c1816 80px 83px),
+    #1c1816;
+  border-radius: 3px;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.4);
+  opacity: 0.85;
+  transform: rotate(-0.6deg);
+}
+
+.filmstrip::after {
+  content: 'REEL PICKS   ▸   SAFETY FILM   ▸   5247   ▸   REEL PICKS   ▸   SAFETY FILM   ▸   5247   ▸   REEL PICKS';
+  position: absolute;
+  inset: 16px 0 0;
+  white-space: pre;
+  overflow: hidden;
+  font-family: var(--font-type);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: rgb(209 165 70 / 0.55);
+  text-align: center;
+}
